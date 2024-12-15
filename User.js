@@ -1,6 +1,6 @@
 const User = require("../models/User");
 
-// Create User
+
 const createUser = async (req, res) => {
   try {
     const user = new User(req.body);
@@ -11,7 +11,7 @@ const createUser = async (req, res) => {
   }
 };
 
-// Get All Users
+
 const getUsers = async (req, res) => {
   try {
     const users = await User.find();
@@ -21,7 +21,7 @@ const getUsers = async (req, res) => {
   }
 };
 
-// Get User by ID
+
 const getUserById = async (req, res) => {
   try {
     const user = await User.findById(req.params.id);
@@ -32,7 +32,7 @@ const getUserById = async (req, res) => {
   }
 };
 
-// Update User
+
 const updateUser = async (req, res) => {
   try {
     const user = await User.findByIdAndUpdate(req.params.id, req.body, {
@@ -46,7 +46,7 @@ const updateUser = async (req, res) => {
   }
 };
 
-// Delete User
+
 const deleteUser = async (req, res) => {
   try {
     const user = await User.findByIdAndDelete(req.params.id);
