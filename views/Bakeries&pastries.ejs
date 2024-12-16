@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bakeries & Pastries</title>
+  <link rel="stylesheet" href="../css/B&P.css">
+  <script>
+    
+    let cart = [];
+
+    
+    function addToCart(itemName, itemPrice) {
+      cart.push({ name: itemName, price: itemPrice });
+      alert(itemName + " has been added to your cart!");
+      console.log(cart);
+    }
+  </script>
+</head>
+<body>
+
+  <nav class="nav">
+    <a href="C:\Users\Sarah\OneDrive\Desktop\front -end web project\home.ejs">Home</a>
+    <a href="C:\Users\Sarah\OneDrive\Desktop\front -end web project\cart.ejs">Cart</a>
+    <a href="C:\Users\Sarah\OneDrive\Desktop\front -end web project\login.ejs">Log Out</a>
+  </nav>
+
+  <header>
+    <h1>Bakeries & Pastries</h1>
+  </header>
+
+  <div class="category-section">
+    <div class="item-container">
+      <div class="item">
+        <img src="../img/croissant.jpeg" alt="Croissant" class="item-image">
+        <h3>Plain Croissant</h3>
+        <p>Price: 38.00 EGP</p>
+        <button class="add-to-cart" onclick="addToCart('Plain Croissant', 38.00)">Add to Cart</button>
+      </div>
+      <div class="item">
+        <img src="../img/nutella croissant.jpeg" alt="Chocolate Croissant" class="item-image">
+        <h3>Chocolate Croissant</h3>
+        <p>Price: 45.00 EGP</p>
+        <button class="add-to-cart" onclick="addToCart('Chocolate Croissant', 45.00)">Add to Cart</button>
+      </div>
+      <div class="item">
+        <img src="../img/glazed donut.jpeg" alt="Donut" class="item-image">
+        <h3>Glazed Donut</h3>
+        <p>Price: 30.00 EGP</p>
+        <button class="add-to-cart" onclick="addToCart('Glazed Donut', 30.00)">Add to Cart</button>
+      </div>
+      <div class="item">
+        <img src="../img/strawberry donut.jpeg" alt="Strawberry Cheesecake Donut" class="item-image">
+        <h3>Strawberry Cheesecake Donut</h3>
+        <p>Price: 38.00 EGP</p>
+        <button class="add-to-cart" onclick="addToCart('Strawberry Cheesecake Donut', 38.00)">Add to Cart</button>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    <p>© 2024 Bakeries & Pastries</p>
+  </footer>
+
+</body>
+</html>
+
