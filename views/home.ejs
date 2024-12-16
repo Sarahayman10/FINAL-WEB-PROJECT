@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <nav class="nav">
+    <a href="home.html">Home</a>
+    <a href="aboutus.html">About Us</a>
+    <a href="login&signup.html">Login & Sign Up</a>
+  </nav>
+  
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Supermarket</title>
+  <link rel="stylesheet" href="./css/home.css">
+</head>
+<body>
+    <div class="header-wrapper">
+      <header class="header">
+        <div class="logo">
+          <img src="./img/Breadfast.png" alt="Breadfast Logo">
+        </div>
+        <nav class="nav">
+          <a href="aboutus.html">About Us</a>
+          <a href="receipt.html">Receipt</a>
+          <a href="cart.html">Cart</a>
+          <a href="login.html">Log Out</a>
+          <a href="#">العربية</a>
+        </nav>
+      </header>
+    </div>
+   
+  </body>
+  
+  </header>
+
+  <!-- Fullscreen background section -->
+  <div class="fullscreen-background">
+    <div class="main-content">
+      <h1>  Household Essentials, From Bread to Everything. </h1>
+      <div class="search-container">
+        <input type="text" placeholder="Find a Product" class="search-input">
+        <select class="location-select">
+          <option>Cairo</option>
+          <option>Alexandria</option>
+          <option>Port Said</option>
+         
+        </select>
+        <button class="search-btn">Go</button>
+      </div>
+      <p>Or explore <a href="category.html">Breadfast</p></a>
+      <div class="options">
+        <div class="option">
+          <h3>Deliver Now</h3>
+          <p>Get fresh breakfast essentials delivered straight to your door.</p>
+
+        </div>
+        <div class="option">
+          <h3>Schedule Another Time</h3>
+          <p>Order Now.. Deliver Later!</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  
+  <div class="order-online-section">
+    <h2> - Now you can - <span> <br> ORDER ONLINE</span></h2>
+   
+    <div class="online-options">
+        <div class="option-box">
+            <img src="track.png" alt="Track Order">
+            <h3>Track your order</h3>
+            <p>Want to know your order status? Now you can know exactly where your order is throughout the delivery process.</p>
+        </div>
+        <div class="option-box">
+            <img src="no-phone-call.png" alt="No Phone Calls">
+            <h3>No phone calls</h3>
+            <p>Order your favorite food easier, faster, and without phone calls.</p>
+        </div>
+    </div>
+
+    <div class="discount-section">
+        <p>Get 30 EGP OFF</p>
+        <p>Use code <b>FIRST10</b> when placing your FIRST order through the WEBSITE</p>
+    </div>
+  </div>
+  <script>
+   
+    const productPages = {
+        "apple": "CATEGORIES/Fruits&Veggies/fruits&veggies.html",
+        "banana": "CATEGORIES/Fruits&Veggies/fruits&veggies.html",
+        "chips": "CATEGORIES/snacks/snacks.html",
+        "coookies": "CATEGORIES/snacks/snacks.html",
+        "cheese": "CATEGORIES/eggs cheese breadfast/eggs_cheese.html",
+        "eggs": "CATEGORIES/eggs cheese breadfast/eggs_cheese.html",
+        "donut": "CATEGORIES/bakeries breadfast/Bakeries&pastries.html",
+        "cigarettes": "/CATEGORIES/behind the counter/BeThCo.html",
+        "heets": "/CATEGORIES/behind the counter/BeThCo.html",
+        "pepsi": "/CATEGORIES/Beverages/bev.html",
+        "birell": "CATEGORIES/Beverages/bev.html",
+        "lip gloss": "CATEGORIES/Beauty/beauty.html",
+        "lotion": "CATEGORIES/Beauty/beauty.html",
+        "perfume": "CATEGORIES/Beauty/beauty.html",
+        "tint": "CATEGORIES/Beauty/beauty.html",
+        "croissant": "CATEGORIES/bakeries breadfast/Bakeries&pastries.html"
+        
+    };
+
+    
+    function searchProduct() {
+        const input = document.querySelector(".search-input").value.toLowerCase().trim();
+        
+        
+        if (productPages[input]) {
+            
+            window.location.href = productPages[input];
+        } else {
+            alert("Product not found. Please try another search.");
+        }
+    }
+
+    
+    document.querySelector(".search-btn").addEventListener("click", searchProduct);
+
+    
+    document.querySelector(".search-input").addEventListener("keypress", function(e) {
+        if (e.key === "Enter") searchProduct();
+    });
+</script>
+
+  <footer>
+    <!-- Footer content here -->
+  </footer>
+
+</body>
+</html>
