@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Beauty Essentials</title>
+  <link rel="stylesheet" href="../css/essentials.css">
+</head>
+<body>
+
+  <nav class="nav">
+    <a href="C:\Users\Sarah\OneDrive\Desktop\front -end web project\home.ejs">Home</a>
+    <a href="C:\Users\Sarah\OneDrive\Desktop\front -end web project\cart.ejs">Cart</a>
+    <a href="C:\Users\Sarah\OneDrive\Desktop\front -end web project\login.ejs">Log Out</a>
+  </nav>
+
+  <header>
+    <h1>Beauty Essentials</h1>
+  </header>
+
+  <div class="category-section">
+    <div class="item-container">
+      <div class="item" data-name="Maybelline Lip Gloss 004" data-price="542.00">
+        <img src="../img/lip gloss.jpeg" alt="Maybelline Lip Gloss" class="item-image">
+        <h3>Maybelline Lip Gloss 004</h3>
+        <p>Price: 542.00 EGP</p>
+        <button class="add-to-cart" onclick="addToCart('Maybelline Lip Gloss 004', 542.00)">Add to Cart</button>
+      </div>
+      <div class="item" data-name="Cerave Moisturizing Lotion" data-price="474.00">
+        <img src="../img/cerave.jpeg" alt="Cera ve" class="item-image">
+        <h3>Cerave Moisturizing Lotion</h3>
+        <p>Price: 474.00 EGP</p>
+        <button class="add-to-cart" onclick="addToCart('Cerave Moisturizing Lotion', 474.00)">Add to Cart</button>
+      </div>
+      <div class="item" data-name="Giorgio Armani Si" data-price="8400.00">
+        <img src="../img/Si.png" alt="Perfume" class="item-image">
+        <h3>Giorgio Armani Si</h3>
+        <p>Price: 8400.00 EGP</p>
+        <button class="add-to-cart" onclick="addToCart('Giorgio Armani Si', 8400.00)">Add to Cart</button>
+      </div>
+      <div class="item" data-name="Maybelline Fit Me Fresh Tint 01" data-price="542.00">
+        <img src="../img/tint.jpeg" alt="tint" class="item-image">
+        <h3>Maybelline Fit Me Fresh Tint 01</h3>
+        <p>Price: 542.00 EGP</p>
+        <button class="add-to-cart" onclick="addToCart('Maybelline Fit Me Fresh Tint 01', 542.00)">Add to Cart</button>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    <p>© 2024 Beauty Essentials</p>
+  </footer>
+
+  <script>
+    function addToCart(itemName, itemPrice) {
+        const cart = JSON.parse(localStorage.getItem('cart')) || [];
+        
+        const existingItem = cart.find(item => item.name === itemName);
+        
+        if (existingItem) {
+            existingItem.quantity += 1;
+        } else {
+            cart.push({ name: itemName, price: itemPrice, quantity: 1 });
+        }
+        
+        localStorage.setItem('cart', JSON.stringify(cart));
+        alert(`${itemName} has been added to your cart.`);
+    }
+  </script>
+</body>
+</html>
