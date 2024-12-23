@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Beverages</title>
+  <link rel="stylesheet" href="bevs.css">
+</head>
+<body>
+
+  <nav class="nav">
+    <a href="C:\Users\Sarah\OneDrive\Desktop\front -end web project\home.html">Home</a>
+    <a href="C:\Users\Sarah\OneDrive\Desktop\front -end web project\cart.html">Cart</a>
+    <a href="C:\Users\Sarah\OneDrive\Desktop\front -end web project\login.html">Log Out</a>
+  </nav>
+
+  <header>
+    <h1>Beverages</h1>
+  </header>
+
+  <div class="category-section">
+    <div class="item-container">
+      <div class="item" data-name="Birell" data-price="15.00">
+        <img src="birell.jpg" alt="Birell" class="item-image">
+        <h3>Birell</h3>
+        <p>Price: 15.00 EGP</p>
+        <button class="add-to-cart" onclick="addToCart('Birell', 15.00)">Add to Cart</button>
+      </div>
+      <div class="item" data-name="Pepsi" data-price="15.00">
+        <img src="pepsi.jpg" alt="Pepsi" class="item-image">
+        <h3>Pepsi</h3>
+        <p>Price: 15.00 EGP</p>
+        <button class="add-to-cart" onclick="addToCart('Pepsi', 15.00)">Add to Cart</button>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    <p>© 2024 Beverages</p>
+  </footer>
+
+  <script>
+    function addToCart(itemName, itemPrice) {
+        const cart = JSON.parse(localStorage.getItem('cart')) || [];
+        
+        const existingItem = cart.find(item => item.name === itemName);
+        
+        if (existingItem) {
+            existingItem.quantity += 1;
+        } else {
+            cart.push({ name: itemName, price: itemPrice, quantity: 1 });
+        }
+        
+        localStorage.setItem('cart', JSON.stringify(cart));
+        alert(`${itemName} has been added to your cart.`);
+    }
+  </script>
+</body>
+</html>
+
