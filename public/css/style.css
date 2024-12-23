@@ -77,14 +77,14 @@ body::before {
   left: 0;
   width: 100%;
   height: 100%;
-  background-image: url("../img/loginBG.jpg"); /* Use the same decorative background pattern */
+  background-image: url("../img/loginBG.jpg"); 
   background-repeat: no-repeat;
   background-size: cover;
   z-index: -1;
 }
 
 .header {
-  background-color: transparent; /* Transparent background */
+  background-color: transparent; 
   color: black;
   display: flex;
   justify-content: space-between;
