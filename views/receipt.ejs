@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order History</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f8f9fa;
+        }
+        .container {
+            width: 80%;
+            margin: 80px auto;
+            padding: 20px;
+        }
+        .order-receipt {
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            padding: 20px;
+        }
+        .line {
+            display: flex;
+            justify-content: space-between;
+            padding: 5px 0;
+        }
+        .line strong {
+            font-weight: bold;
+        }
+        .back-btn, .view-items-btn {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            padding: 10px 20px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s;
+        }
+        .back-btn:hover, .view-items-btn:hover {
+            background-color: #0056b3;
+        }
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.5);
+        }
+        .modal-content {
+            background-color: #fefefe;
+            margin: 15% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+            border-radius: 8px;
+        }
+        .close-btn {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        .close-btn:hover,
+        .close-btn:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+        .cart-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid #ccc;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+    
+        
+    </div>
+    <div class="container">
+        <div class="order-receipt">
+            <h2> Last Order Receipt</h2>
+            <div class="line"><strong>Delivery Address:</strong> <span id="delivery-address"></span></div>
+            <div class="line"><strong>Delivery Time:</strong> <span id="delivery-time"></span></div>
+            <div class="line"><strong>Payment Method:</strong> <span id="payment-method"></span></div>
+            <div class="line" id="card-details" style="display: none;">
+                <div class="line"><strong>Card Number:</strong> <span id="card-number"></span></div>
+                <div class="line"><strong>Expiry Date:</strong> <span id="expiry-date"></span></div>
+                <div class="line"><strong>CVV:</strong> <span id="cvv"></span></div>
+            </div>
+            <div class="line"><strong>Promo Code:</strong> <span id="promo-code"></span></div>
+            <div class="line"><strong>Tip:</strong> <span id="tip-amount"></span></div>
+            <div class="line"><strong>Subtotal:</strong> <span id="subtotal"></span></div>
+            <div class="line"><strong>Delivery:</strong> <span id="delivery"></span></div>
+            <div class="line"><strong>Discount:</strong> <span id="discount"></span></div>
+            <div class="line"><strong>Total:</strong> <span id="total"></span></div>
+            <button class="view-items-btn" onclick="showItems()">View Items</button>
+            <button class="back-btn" onclick="window.location.href='/home.ejs'">Back to Home</button>
+        </div>
+    </div>
+    <div id="cart-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeModal()">&times;</span>
+            <h2>Cart Items</h2>
+            <div id="cart-items"></div>
+        </div>
+    </div>
+  
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+           
+            const orderDetails = JSON.parse(localStorage.getItem('orderDetails'));
+
+            if (orderDetails) {
+                document.getElementById('delivery-address').textContent = orderDetails.deliveryAddress;
+                document.getElementById('delivery-time').textContent = orderDetails.deliveryTime;
+                document.getElementById('payment-method').textContent = orderDetails.paymentMethod;
+
+                if (orderDetails.paymentMethod === 'visa') {
+                    document.getElementById('card-details').style.display = 'block';
+                    document.getElementById('card-number').textContent = orderDetails.cardNumber;
+                    document.getElementById('expiry-date').textContent = orderDetails.expiryDate;
+                    document.getElementById('cvv').textContent = orderDetails.cvv;
+                }
+
+                document.getElementById('promo-code').textContent = orderDetails.promoCode;
+                document.getElementById('tip-amount').textContent = `$${parseFloat(orderDetails.tipAmount).toFixed(2)}`;
+                document.getElementById('subtotal').textContent = `$${orderDetails.subtotal}`;
+                document.getElementById('delivery').textContent = `$${orderDetails.delivery}`;
+                document.getElementById('discount').textContent = `$${orderDetails.discount}`;
+                document.getElementById('total').textContent = `$${orderDetails.total}`;
+            }
+        });
+
+        function showItems() {
+            // Retrieve cart items from localStorage
+            const cartItems = JSON.parse(localStorage.getItem('cart')) || [];
+
+            if (cartItems.length > 0) {
+                const cartItemsContainer = document.getElementById('cart-items');
+                cartItemsContainer.innerHTML = '';
+
+                // Aggregate items to avoid duplicates
+                const uniqueItems = {};
+                cartItems.forEach(item => {
+                    if (uniqueItems[item.name]) {
+                        uniqueItems[item.name].quantity += item.quantity;
+                    } else {
+                        uniqueItems[item.name] = { ...item };
+                    }
+                });
+
+                // Display items
+                Object.values(uniqueItems).forEach(item => {
+                    const itemElement = document.createElement('div');
+                    itemElement.className = 'cart-item';
+                    itemElement.innerHTML = `<span>${item.name}</span><span>${item.quantity} x $${item.price.toFixed(2)}</span>`;
+                    cartItemsContainer.appendChild(itemElement);
+                });
+
+                
+                document.getElementById('cart-modal').style.display = 'block';
+            }
+        }
+
+        function closeModal() {
+            document.getElementById('cart-modal').style.display = 'none';
+        }
+
+
+        
+    </script>
+</body>
+</html>
+
+
+

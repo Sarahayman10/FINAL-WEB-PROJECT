@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cart</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f8f9fa;
+        }
+        .container {
+            width: 80%;
+            margin: 80px auto 20px auto;
+            padding: 20px;
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .cart-items-container {
+            max-height: 400px; /* Adjust the height as needed */
+            overflow-y: auto;
+            margin-bottom: 20px;
+        }
+        .cart-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            margin: 10px 0;
+            padding: 10px;
+        }
+        .cart-item img {
+            width: 100px;
+            height: auto;
+            border-radius: 8px;
+        }
+        .cart-item-details {
+            flex: 1;
+            margin-left: 10px;
+        }
+        .cart-item button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            padding: 10px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .cart-item button:hover {
+            background-color: #0056b3;
+        }
+        .checkout-button {
+            display: block;
+            width: 200px;
+            margin: 20px auto;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            padding: 10px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+        }
+        .checkout-button:hover {
+            background-color: #218838;
+        }
+    </style>
+</head>
+<body>
+  
+    <!-- Navigation Header -->
+    <div class="header">
+        
+        <nav>
+            <a href="home.ejs">Home</a>
+            <a href="aboutus.html">About Us</a>
+            <a href="login.ejs">Logout</a>
+        </nav>
+    </div>
+
+    <div class="container">
+        <h1>Shopping Cart</h1>
+        <div class="cart-items-container" id="cart-items"></div>
+        <div id="cart-total">
+            <h2>Total: $<span id="total-amount">0.00</span></h2>
+        </div>
+    </div>
+    <button class="checkout-button" onclick="saveCartDataForCheckout()">Checkout</button>
+
+    <script>
+        function displayCart() {
+            const cart = JSON.parse(localStorage.getItem('cart')) || [];
+            const cartItemsContainer = document.getElementById('cart-items');
+            const totalAmountElement = document.getElementById('total-amount');
+            
+            if (cart.length === 0) {
+        cartItemsContainer.innerHTML = '<p>Your cart is empty.</p>';
+        totalAmountElement.textContent = '0.00';
+        return;
+    }
+            cartItemsContainer.innerHTML = '';
+            let totalAmount = 0;
+            const uniqueItems = {};
+
+            cart.forEach(item => {
+                if (uniqueItems[item.name]) {
+                    uniqueItems[item.name].quantity += item.quantity;
+                } else {
+                    uniqueItems[item.name] = { ...item };
+                }
+            });
+
+            Object.values(uniqueItems).forEach(item => {
+                const itemTotal = item.price * item.quantity;
+                totalAmount += itemTotal;
+
+                const cartItemElement = document.createElement('div');
+                cartItemElement.className = 'cart-item';
+                cartItemElement.innerHTML = `
+                    <div class="cart-item-details">
+                        <h3>${item.name}</h3>
+                        <p>Price: $${item.price.toFixed(2)}</p>
+                        <p>Quantity: ${item.quantity}</p>
+                    </div>
+                    <div>
+                        <button onclick="updateQuantity('${item.name}', -1)">-</button>
+                        <button onclick="updateQuantity('${item.name}', 1)">+</button>
+                        <button onclick="removeFromCart('${item.name}')">Remove</button>
+                    </div>
+                `;
+                cartItemsContainer.appendChild(cartItemElement);
+            });
+
+            totalAmountElement.textContent = totalAmount.toFixed(2);
+            localStorage.setItem('cartTotal', totalAmount.toFixed(2));
+        }
+
+        function updateQuantity(itemName, change) {
+            let cart = JSON.parse(localStorage.getItem('cart')) || [];
+            cart = cart.map(item => {
+                if (item.name === itemName) {
+                    return { ...item, quantity: item.quantity + change };
+                }
+                return item;
+            }).filter(item => item.quantity > 0);
+            localStorage.setItem('cart', JSON.stringify(cart));
+            displayCart();
+        }
+
+        function removeFromCart(itemName) {
+            let cart = JSON.parse(localStorage.getItem('cart')) || [];
+            cart = cart.filter(item => item.name !== itemName);
+            localStorage.setItem('cart', JSON.stringify(cart));
+            displayCart();
+        }
+
+        displayCart();
+        
+        function saveCartDataForCheckout() {
+    const totalAmount = document.getElementById('total-amount').textContent;
+    localStorage.setItem('cartTotal', totalAmount); // Save the total amount
+    window.location.href = "/checkout.ejs"; // Redirect to checkout page
+}
+
+
+
+    </script>
+
+</body>
+</html>
