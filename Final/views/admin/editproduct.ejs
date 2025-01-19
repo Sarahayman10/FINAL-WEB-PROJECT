@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html>
+  <%- include('../components/headTag.ejs') %>
+  <body>
+    <%- include('./components/header.ejs') %>
+    <%- include('./components/navbar.ejs') %>
+
+    <div class="main-container">
+      <div class="container">
+        <div class="row gutters">
+          <div class="col-xl-9 col-lg-9 col-md-12 col-sm-12 col-12">
+            <div class="card h-100">
+              <div class="card-body">
+                <div class="row gutters">
+                  <!-- Product Image Section -->
+                  <div class="col-6 d-flex justify-content-center mb-4">
+                    <img src="<%= product.imageUrl %>" class="img-thumbnail" alt="Product Image">
+                  </div>
+
+                  <!-- Product Details Section -->
+                  <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                    <h6 class="mb-2 text-primary">Product Details</h6>
+                  </div>
+                  <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
+                    <div class="form-group">
+                      <label for="name">Product Name</label>
+                      <input
+                        type="text"
+                        class="form-control"
+                        id="name"
+                        placeholder="Enter product name"
+                        value="<%= product.name %>"
+                        required
+                        disabled
+                      />
+                    </div>
+                  </div>
+                  <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
+                    <div class="form-group">
+                      <label for="category">Category</label>
+                      <select class="form-control" id="category" required disabled>
+                        <option value="" disabled selected>Select category</option>
+                        <option value="Bakeries & Pastries" <%= product.category === 'Bakeries & Pastries' ? 'selected' : '' %>>Bakeries & Pastries</option>
+                        <option value="Dairy" <%= product.category === 'Dairy' ? 'selected' : '' %>>Dairy</option>
+                        <option value="Fruits and Veggies" <%= product.category === 'Fruits and Veggies' ? 'selected' : '' %>>Fruits and Veggies</option>
+                        <option value="Snacks" <%= product.category === 'Snacks' ? 'selected' : '' %>>Snacks</option>
+                        <option value="Behind the Counter" <%= product.category === 'Behind the Counter' ? 'selected' : '' %>>Behind the Counter</option>
+                        <option value="Beverages" <%= product.category === 'Beverages' ? 'selected' : '' %>>Beverages</option>
+                        <option value="Beauty Essentials" <%= product.category === 'Beauty Essentials' ? 'selected' : '' %>>Beauty Essentials</option>
+                      </select>
+                    </div>
+                  </div>
+                  <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
+                    <div class="form-group">
+                      <label for="price">Price (EGP)</label>
+                      <input
+                        type="number"
+                        class="form-control"
+                        id="price"
+                        placeholder="Enter price"
+                        value="<%= product.price %>"
+                        min="0"
+                        required
+                      />
+                    </div>
+                  </div>
+                  <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
+                    <div class="form-group">
+                      <label for="quantity">Quantity</label>
+                      <input
+                        type="number"
+                        class="form-control"
+                        id="quantity"
+                        placeholder="Enter quantity"
+                        value="<%= product.quantity %>"
+                        min="0"
+                        required
+                      />
+                    </div>
+                  </div>
+                  <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                    <div class="form-group">
+                      <label for="description">Description</label>
+                      <textarea
+                        class="form-control"
+                        id="description"
+                        placeholder="Enter product description"
+                        rows="3"
+                      ><%= product.description %></textarea>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Buttons Section -->
+                <div class="row gutters">
+                  <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                    <div class="text-right">
+                      <button
+                        type="button"
+                        id="cancel"
+                        name="cancel"
+                        class="btn btn-secondary"
+                      >
+                        Cancel
+                      </button>
+                      <button
+                        type="submit"
+                        id="submit"
+                        name="submit"
+                        class="btn btn-success"
+                      >
+                        Save Product
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script type="module">
+      import showMsg from "/js/toastify.js";
+
+      function validateForm() {
+        const price = document.getElementById('price').value;
+        const quantity = document.getElementById('quantity').value;
+
+        if (  !price || !quantity) {
+          showMsg("Please fill in all fields.", "red");
+          return false;
+        }
+
+        if (isNaN(price) || price < 0) {
+          showMsg("Please enter a valid price.", "red");
+          return false;
+        }
+
+        if (isNaN(quantity) || quantity < 0) {
+          showMsg("Please enter a valid quantity.", "red");
+          return false;
+        }
+
+        return true;
+      }
+
+      document.getElementById('submit').addEventListener('click', async () => {
+        if (validateForm()) {
+          const price = document.getElementById('price').value;
+          const quantity = document.getElementById('quantity').value;
+          const description = document.getElementById('description').value;
+
+          const productData = {
+            price,
+            quantity,
+            description
+          };
+
+          try {
+            const response = await fetch(`/products/<%= product._id %>`, {
+              method: 'PUT',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify(productData),
+            });
+
+            const result = await response.json();
+
+            if (response.ok) {
+              showMsg('Product updated successfully.', 'green');
+              setTimeout(() => {
+                window.location.href = '/admin/products';  // Redirect to products page
+              }, 1000);
+            } else {
+              showMsg('Error: ' + result.message, 'red');
+            }
+          } catch (error) {
+            showMsg('Error: ' + error.message, 'red');
+          }
+        }
+      });
+
+      document.getElementById('cancel').addEventListener('click', () => {
+        window.location.reload();  // Reload the page if user cancels
+      });
+    </script>
+  </body>
+</html>
