@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+  <%- include("../components/headTag.ejs") %>
+  <body>
+    <%- include("./components/navbar.ejs") %>
+
+    <div class="main-container">
+      <div class="container">
+        <div class="row gutters">
+          <div class="col-xl-9 col-lg-9 col-md-12 col-sm-12 col-12">
+            <div class="card h-100">
+              <div class="card-body">
+                <div class="row gutters">
+                  <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                    <h6 class="mb-2 text-primary">Personal Details</h6>
+                  </div>
+                  <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
+                    <div class="form-group">
+                      <label for="firstName">First Name</label>
+                      <input
+                        type="text"
+                        class="form-control"
+                        id="firstName"
+                        placeholder="Enter first name"
+                        value="<%= user.firstName %>"
+                      />
+                    </div>
+                  </div>
+                  <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
+                    <div class="form-group">
+                      <label for="lastName">Last Name</label>
+                      <input
+                        type="text"
+                        class="form-control"
+                        id="lastName"
+                        placeholder="Enter last name"
+                        value="<%= user.lastName %>"
+                      />
+                    </div>
+                  </div>
+                  <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
+                    <div class="form-group">
+                      <label for="eMail">Email</label>
+                      <input
+                        type="email"
+                        class="form-control"
+                        id="eMail"
+                        placeholder="Enter email ID"
+                        value="<%= user.email %>"
+                        disabled
+                      />
+                    </div>
+                  </div>
+                  <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
+                    <div class="form-group">
+                      <label for="points">Points</label>
+                      <input
+                        type="number"
+                        class="form-control"
+                        id="points"
+                        placeholder="Enter points"
+                        value="<%= user.points %>"
+                        disabled
+                      />
+                    </div>
+                  </div>
+                </div>
+                <br /><br />
+                <div class="row gutters">
+                  <h6 class="mb-2 text-primary">Change Password</h6>
+
+                  <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                    <div class="form-group">
+                      <label for="newPassword">New Password</label>
+                      <input
+                        type="password"
+                        class="form-control"
+                        id="newPassword"
+                        placeholder="Enter new password"
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                <div class="row gutters">
+                  <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                    <div class="text-right">
+                      <button
+                        type="button"
+                        id="cancel"
+                        name="cancel"
+                        class="btn btn-secondary"
+                      >
+                        Cancel
+                      </button>
+                      <button
+                        type="button"
+                        id="submit"
+                        name="submit"
+                        class="btn btn-success"
+                      >
+                        Update
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script type="module">
+      import showMsg from "/js/toastify.js";
+
+      function validateForm() {
+        const firstName = document.getElementById('firstName').value.trim();
+        const lastName = document.getElementById('lastName').value.trim();
+        const newPassword = document.getElementById('newPassword').value;
+
+        if (!firstName || !lastName) {
+          showMsg("First Name and Last Name cannot be empty.", "red");
+          return false;
+        }
+
+        if (newPassword && newPassword.length < 8) {
+          showMsg("Password must be at least 8 characters long.", "red");
+          return false;
+        }
+
+        return true;
+      }
+
+      document.getElementById('submit').addEventListener('click', async () => {
+        if (validateForm()) {
+          const firstName = document.getElementById('firstName').value;
+          const lastName = document.getElementById('lastName').value;
+          const newPassword = document.getElementById('newPassword').value;
+
+          const userData = {
+            firstName,
+            lastName,
+            ...(newPassword && { password: newPassword }),
+          };
+
+          try {
+            const response = await fetch(`/users/<%=user._id%>`, {
+              method: 'PUT',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify(userData),
+            });
+
+            const result = await response.json();
+
+            if (response.ok) {
+              showMsg('User updated successfully.', 'green');
+              setTimeout(() => {
+                location.reload();
+              }, 1000);
+            } else {
+              showMsg('Error: ' + result.message, 'red');
+            }
+          } catch (error) {
+            showMsg('Error: ' + error.message, 'red');
+          }
+        }
+      });
+
+      document.getElementById('cancel').addEventListener('click', () => {
+        window.location.reload();
+      });
+    </script>
+  </body>
+</html>
